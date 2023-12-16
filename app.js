@@ -3,14 +3,40 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
+const YAML = require('yamljs')
 
 const { Pool } = require('pg');
+var app = express();
+
+
+/* to import .json file directly,
+ you have to use require and directly send it to swaggerUI.Setup */
+
+const swaggerDocument = require('./docs/swagger.json');
+
+ 
+/* Fir YAML you have to declare a const swaggerDefination and passed that here,
+  --> You need to load the yaml file using YAML.laod('path to yaml file')
+    and pass that into SwaggerUi.setup
+
+  const options = {
+  swaggerDefinition,
+  apis: ['./routes/*.js'], // Path to the API routes folder
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+*/
+
+
+
+app.use('/apis', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
-var app = express();
 
 const pool = new Pool({
   user: 'postgres',
@@ -46,7 +72,6 @@ process.on('exit', () => pool.end());
 
 
 // view engine setup
-console.log("__dirname --->",__dirname)
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
 
