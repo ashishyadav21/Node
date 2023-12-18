@@ -6,9 +6,11 @@ var logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs')
+const zod = require('zod')
 
 const { Pool } = require('pg');
 var app = express();
+app.use(express.json())
 
 
 /* to import .json file directly,
@@ -36,6 +38,7 @@ app.use('/apis', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const exp = require('constants');
 
 
 const pool = new Pool({
@@ -57,23 +60,23 @@ pool.query('SELECT NOW()', (err, result) => {
 });
 
 
-// Example route to fetch data from PostgreSQL
-app.get('/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Error fetching data from PostgreSQL:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
+// app.get('/users', async (req, res) => {
+//   try {
+//     const result = await pool.query('SELECT * FROM users');
+//     res.json(result.rows);
+//   } catch (error) {
+//     console.error('Error fetching data from PostgreSQL:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 
 process.on('exit', () => pool.end());
 
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+ 
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -81,8 +84,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+
 app.use('/users', usersRouter);
+app.use('/', indexRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
