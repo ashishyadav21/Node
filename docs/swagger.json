@@ -18,8 +18,7 @@
         }
       ],
     "$schemes":["http","Https"], 
-    "basePath": "/api/v1",
-    "paths": {
+     "paths": {
         "/users": {
             "get": {
                 "produces": [
@@ -32,7 +31,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref":[]
+                                "$ref":"#/definitions/models.UserResponse"
                             }
                         }
                     }
@@ -45,16 +44,16 @@
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create a contact",
+                "summary": "Create a Users",
                 "parameters": [
                     {
-                        "description": "Create contact",
-                        "name": "contact",
+                        "description": "Create User",
+                        "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/models.ContactRequest"
+                            "$ref": "#/definitions/models.createUserRequest"
                         }
                     }
                 ],
@@ -63,7 +62,7 @@
                         "description": "OK",
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/models.ContactResponse"
+                            "$ref": "#/definitions/models.UserResponse"
                         }
                     },
                     "400": {
@@ -75,6 +74,90 @@
                     }
                 }
             }
+        },
+        "/users/{userId}":{
+            "get":{
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "summary": "Get user detail",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref":"#/definitions/models.UserResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.createUserRequest": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "example": "Ashish"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "password"
+                },
+                "dob": {
+                    "type": "string",
+                    "example": "21/07/1992"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "Ashish"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Yadav"
+                }
+            }
+        },
+
+        "models.UserResponse":{
+            "type": "object",
+            "properties":{
+                "username": {
+                    "type":"string",
+                    "example": "Ashish"
+                },
+                "userStatus":{
+                    "type": "string",
+                    "example":"active"
+                },
+                "token":{
+                    "type":"string",
+                    "example": "eeqqquerhbsayugduyashgdasd"
+                }
+            }
+        },
+
+        "models.ErrorResponse": {
+            "type":"object",
+            "properties":{
+                "status":{
+                    "type":"string"
+                }
+            }
         }
     }
-}   
+}
+
+
