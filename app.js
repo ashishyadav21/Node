@@ -6,17 +6,15 @@ var logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs')
-const zod = require('zod')
 
-const { Pool } = require('pg');
+require('dotenv').config()
+
 var app = express();
 app.use(express.json())
 
 
 /* to import .json file directly,
  you have to use require and directly send it to swaggerUI.Setup */
-
-const swaggerDocument = require('./docs/swagger.json');
 
  
 /* Fir YAML you have to declare a const swaggerDefination and passed that here,
@@ -32,45 +30,14 @@ const swaggerSpec = swaggerJSDoc(options);
 */
 
 
+const swaggerDocument = require('./docs/swagger.json');
 
 app.use('/apis', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const exp = require('constants');
 
-
-const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'test',
-  password: '2107',
-  port: 5433, // default PostgreSQL port
-});
-
-
-// Test PostgreSQL connection
-pool.query('SELECT NOW()', (err, result) => {
-  if (err) {
-    console.error('Error connecting to PostgreSQL:', err);
-  } else {
-    console.log('Connected to PostgreSQL at:', result.rows[0].now);
-  }
-});
-
-
-// app.get('/users', async (req, res) => {
-//   try {
-//     const result = await pool.query('SELECT * FROM users');
-//     res.json(result.rows);
-//   } catch (error) {
-//     console.error('Error fetching data from PostgreSQL:', error);
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-process.on('exit', () => pool.end());
 
 
 // view engine setup
@@ -87,14 +54,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 app.use('/', indexRouter);
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-
 
 
 // error handler

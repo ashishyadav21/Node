@@ -2,6 +2,9 @@
     Install Express.js
     Install Express Gernetor --> To Build the directory and file Structure
     Inttall Nodman ---> To hot relaod
+    Install Zod --> To check the valid input schema
+    Install pg dotenv --> To access the env variable
+    Install jsWebToken --> To get the jwt token for autharization.
 
 
     .Jade is extension to write HTML.
