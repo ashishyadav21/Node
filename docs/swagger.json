@@ -44,19 +44,25 @@
                 "produces": [
                     "application/json"
                 ],
+
                 "summary": "Create a Users",
-                "parameters": [
-                    {
-                        "description": "Create User",
-                        "name": "user",
-                        "in": "body",
+                "requestBody":{
+                        "description": "Create a User",
                         "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/models.createUserRequest"
-                        }
-                    }
-                ],
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                                "type":"object",
+                                "$ref": "#/definitions/models.createUserRequest"
+                            }
+                          },
+                          "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/definitions/models.createUserRequest"
+                            }
+                          }
+                      }
+                },
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -114,9 +120,9 @@
                 },
                 "password": {
                     "type": "string",
-                    "example": "password"
+                    "example": "passw"
                 },
-                "dob": {
+                "dateofbirth": {
                     "type": "string",
                     "example": "21/07/1992"
                 },
@@ -127,6 +133,10 @@
                 "lastName": {
                     "type": "string",
                     "example": "Yadav"
+                },
+                "email":{
+                    "type":"string",
+                    "example":"ashish@gmail.com"
                 }
             }
         },
