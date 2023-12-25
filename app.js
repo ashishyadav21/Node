@@ -6,7 +6,7 @@ var logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 const YAML = require('yamljs')
-
+ 
 require('dotenv').config()
 
 var app = express();
@@ -50,7 +50,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+ 
 
 app.use('/users', usersRouter);
 app.use('/', indexRouter);
