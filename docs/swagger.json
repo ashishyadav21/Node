@@ -24,6 +24,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "security": [
+                    {
+                      "BearerAuth": []
+                    }
+                  ],
                 "summary": "Get all users",
                 "responses": {
                     "200": {
@@ -86,6 +91,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "security": [
+                    {
+                      "BearerAuth": []
+                    }
+                  ],
                 "parameters": [
                     {
                         "type": "integer",
@@ -93,7 +103,14 @@
                         "name": "userId",
                         "in": "path",
                         "required": true
-                    }
+                    },
+                    {
+                        "name": "x-auth-token",
+                        "in": "header",
+                        "description": "an authorization header",
+                        "required": true,
+                        "type": "string"
+                      }
                 ],
                 "summary": "Get user detail",
                 "responses": {
@@ -108,9 +125,62 @@
                     }
                 }
             }
+        },
+        "/users/signin": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+
+                "summary": "Signin User",
+                "requestBody":{
+                        "description": "Login to account",
+                        "required": true,
+                        "content": {
+                          "application/json": {
+                            "schema": {
+                                "type":"object",
+                                "$ref": "#/definitions/models.signinUserRequest"
+                            }
+                          },
+                          "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/definitions/models.signinUserRequest"
+                            }
+                          }
+                      }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.UserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
+
     "definitions": {
+        "models.securitySchemes":{
+            "bearerAuth":{
+                "type":"http",
+                "scheme":"bearerAuth",
+                "bearerFormat":"JWT"
+            }
+        },
         "models.createUserRequest": {
             "type": "object",
             "properties": {
@@ -141,6 +211,19 @@
             }
         },
 
+        "models.signinUserRequest":{
+            "type":"object",
+            "properties": {
+                "username":{
+                    "type":"string",
+                    "example":"ashish"
+                },
+                "password" :{
+                    "type":"string",
+                    "example":"asadsd"
+                }            
+            }
+        },
         "models.UserResponse":{
             "type": "object",
             "properties":{
@@ -167,7 +250,17 @@
                 }
             }
         }
-    }
+    },
+
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+      }
+    } 
 }
 
 
