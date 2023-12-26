@@ -57,6 +57,15 @@ router.get('/:userId', (req, res) => {
         message: "No authentication token, authorization denied.",
         jwtExpired: true,
       });
+
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+      if (!verified)
+        return res.status(401).json({
+          success: false,
+          result: null,
+          message: "Token verification failed, authorization denied.",
+          jwtExpired: true,
+        });  
  
   const insertQuery = 'select * from users'
 
